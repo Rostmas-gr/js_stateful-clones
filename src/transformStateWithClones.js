@@ -8,7 +8,7 @@
  */
 function transformStateWithClones(state, actions) {
   const stateHistory = [];
-  let currentState = state;
+  let currentState = { ...state };
 
   for (const action of actions) {
     switch (action.type) {
@@ -19,15 +19,17 @@ function transformStateWithClones(state, actions) {
       case 'addProperties':
         currentState = {
           ...currentState,
-          ...action.extraDatа,
+          ...(action.extraData || {}),
         };
         break;
 
       case 'removeProperties':
         currentState = { ...currentState };
 
-        for (const key of action.keysToRemove) {
-          delete currentState[key];
+        if (action.keysToRemove) {
+          for (const key of action.keysToRemove) {
+            delete currentState[key];
+          }
         }
         break;
 
